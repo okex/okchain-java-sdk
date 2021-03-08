@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.SerializedName;
+import com.okexchain.env.EnvInstance;
+import com.okexchain.utils.crypto.AddressUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,6 +18,9 @@ public class MsgWithdrawRewardValue {
     private String validatorAddress;
 
     public void setValidatorAddress(String validatorAddress) {
+        if (!validatorAddress.startsWith(EnvInstance.getEnv().GetMainPrefix())) {
+            validatorAddress = AddressUtil.convertAddressFromHexToBech32(validatorAddress);
+        }
         this.validatorAddress = validatorAddress;
     }
 

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.SerializedName;
+import com.okexchain.env.EnvInstance;
+import com.okexchain.utils.crypto.AddressUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -23,9 +25,19 @@ public class MsgTransferTokenPairOwnershipValue {
     @SerializedName("to_address")
     private String toAddress;
 
-    public void setFromAddress(String fromAddress) {this.fromAddress = fromAddress;}
+    public void setFromAddress(String fromAddress) {
+        if (!fromAddress.startsWith(EnvInstance.getEnv().GetMainPrefix())) {
+            fromAddress = AddressUtil.convertAddressFromHexToBech32(fromAddress);
+        }
+        this.fromAddress = fromAddress;
+    }
 
-    public void setToAddress(String toAddress) {this.toAddress = toAddress;}
+    public void setToAddress(String toAddress) {
+        if (!toAddress.startsWith(EnvInstance.getEnv().GetMainPrefix())) {
+            toAddress = AddressUtil.convertAddressFromHexToBech32(toAddress);
+        }
+        this.toAddress = toAddress;
+    }
 
     public void setProduct(String product) {this.product = product;}
 

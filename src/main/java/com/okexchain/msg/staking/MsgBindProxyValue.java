@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.SerializedName;
+import com.okexchain.env.EnvInstance;
+import com.okexchain.utils.crypto.AddressUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -21,9 +23,15 @@ public class MsgBindProxyValue {
 
 
     public void setDelAddress(String delAddress) {
+        if (!delAddress.startsWith(EnvInstance.getEnv().GetMainPrefix())) {
+            delAddress = AddressUtil.convertAddressFromHexToBech32(delAddress);
+        }
         this.delAddress = delAddress;
     }
     public void setProxyAddress(String proxyAddress) {
+        if (!proxyAddress.startsWith(EnvInstance.getEnv().GetMainPrefix())) {
+            proxyAddress = AddressUtil.convertAddressFromHexToBech32(proxyAddress);
+        }
         this.proxyAddress = proxyAddress;
     }
 

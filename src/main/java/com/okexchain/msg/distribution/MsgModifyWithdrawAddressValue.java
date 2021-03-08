@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.SerializedName;
+import com.okexchain.env.EnvInstance;
+import com.okexchain.utils.crypto.AddressUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -24,6 +26,9 @@ public class MsgModifyWithdrawAddressValue {
     }
 
     public void setWithdrawAddress(String withdrawAddress) {
+        if (!withdrawAddress.startsWith(EnvInstance.getEnv().GetMainPrefix())) {
+            withdrawAddress = AddressUtil.convertAddressFromHexToBech32(withdrawAddress);
+        }
         this.withdrawAddress = withdrawAddress;
     }
 

@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.SerializedName;
+import com.okexchain.env.EnvInstance;
+import com.okexchain.utils.crypto.AddressUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import sun.lwawt.macosx.CFRetainedResource;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder(alphabetic = true)
@@ -19,7 +22,12 @@ public class MsgConfirmTokenPairOwnershipValue {
     @SerializedName("product")
     private String product;
 
-    public void setFromAddress(String fromAddress) {this.fromAddress = fromAddress;}
+    public void setFromAddress(String fromAddress) {
+        if (!fromAddress.startsWith(EnvInstance.getEnv().GetMainPrefix())) {
+            fromAddress = AddressUtil.convertAddressFromHexToBech32(fromAddress);
+        }
+        this.fromAddress = fromAddress;
+    }
 
     public void setProduct(String product) {this.product = product;}
 

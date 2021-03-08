@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.SerializedName;
+import com.okexchain.env.EnvInstance;
+import com.okexchain.utils.crypto.AddressUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -44,7 +46,12 @@ public class MsgTokenModifyValue {
 
     public void setWholeName(String wholeName) {this.wholeName = wholeName;}
 
-    public void setOwner(String owner) {this.owner = owner;}
+    public void setOwner(String owner) {
+        if (!owner.startsWith(EnvInstance.getEnv().GetMainPrefix())) {
+            owner = AddressUtil.convertAddressFromHexToBech32(owner);
+        }
+        this.owner = owner;
+    }
 
     public void setWholeNameModified(Boolean IsWholeNameModified) {this.IsWholeNameModified = IsWholeNameModified;}
 

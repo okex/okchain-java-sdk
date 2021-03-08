@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.SerializedName;
+import com.okexchain.env.EnvInstance;
+import com.okexchain.utils.crypto.AddressUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -17,6 +19,9 @@ public class MsgUnjailValue {
     private String address;
 
     public void setAddress(String address) {
+        if (!address.startsWith(EnvInstance.getEnv().GetMainPrefix())) {
+            address = AddressUtil.convertAddressFromHexToBech32(address);
+        }
         this.address = address;
     }
 

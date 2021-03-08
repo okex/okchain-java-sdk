@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.SerializedName;
+import com.okexchain.env.EnvInstance;
 import com.okexchain.msg.common.Token;
+import com.okexchain.utils.crypto.AddressUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -22,7 +24,12 @@ public class MsgTokenBurnValue {
 
     public void setAmount(Token amount) {this.amount = amount;}
 
-    public void setOwner(String owner) {this.owner = owner;}
+    public void setOwner(String owner) {
+        if (!owner.startsWith(EnvInstance.getEnv().GetMainPrefix())) {
+            owner = AddressUtil.convertAddressFromHexToBech32(owner);
+        }
+        this.owner = owner;
+    }
 
     @Override
     public String toString() {

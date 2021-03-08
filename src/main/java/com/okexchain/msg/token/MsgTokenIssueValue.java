@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.SerializedName;
+import com.okexchain.env.EnvInstance;
+import com.okexchain.utils.crypto.AddressUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -51,7 +53,12 @@ public class MsgTokenIssueValue {
 
     public void setTotalSupply(String totalSupply) {this.totalSupply = totalSupply;}
 
-    public void  setOwner(String owner) {this.owner = owner;}
+    public void  setOwner(String owner) {
+        if (!owner.startsWith(EnvInstance.getEnv().GetMainPrefix())) {
+            owner = AddressUtil.convertAddressFromHexToBech32(owner);
+        }
+        this.owner = owner;
+    }
 
     public void setMintable(Boolean mintable) {this.mintable = mintable;}
 
